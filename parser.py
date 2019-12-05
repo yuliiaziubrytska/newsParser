@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from newspaper import Article
+import json
 
 response = requests.get('https://www.bbc.com/ukrainian')
 doc = BeautifulSoup(response.text, 'html.parser')
@@ -17,14 +18,15 @@ for link in links:
     # print('http:/' + link['href'])
     article_address = 'https://www.bbc.com' + link['href']
     try:
-        # article = requests.get(article_address)
+        
         page = requests.request("GET", article_address)
+        headline = page.text.split('title')[1][1:-2]
         article = Article(article_address)
 
         article.download()
         article.parse()
 
-        print(article.text)
+        print(headline)
     except:
         pass
     
